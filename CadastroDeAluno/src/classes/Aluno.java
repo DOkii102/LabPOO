@@ -89,6 +89,10 @@ public class Aluno implements Comparable<Aluno>{
         this.endereco = endereco;
     }
 
+    public int getId() {
+        return id;
+    }
+
     
     
     

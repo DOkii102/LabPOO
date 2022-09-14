@@ -6,27 +6,30 @@ package gui;
 
 import classes.Aluno;
 import java.util.ArrayList;
+import javax.swing.JTable;
+import operacoes.OperacoesTabela;
 
 /**
  *
  * @author joovitor
  */
-public class CadastroAlunoEditar extends javax.swing.JFrame {
+public class CadastroNovoAluno extends javax.swing.JFrame {
 
     private ArrayList<Aluno> listaAlunos;
     private Aluno aluno;
-    private CadastroAluno cdAluno;
+    private JTable tabelaAlunos;
     /**
      * Creates new form CadastroAlunoEditar
      */
-    public CadastroAlunoEditar(ArrayList<Aluno> listaAlunos, Aluno aluno, CadastroAluno cdAluno) {
+    public CadastroNovoAluno(ArrayList<Aluno> listaAlunos, Aluno aluno, JTable tabelaAlunos) {
         initComponents();
         this.listaAlunos = listaAlunos;
         this.aluno = aluno;
-        this.cdAluno = cdAluno;
-
+        this.tabelaAlunos = tabelaAlunos;
+        
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        carregaDadaos(aluno);
     }
 
     /**
@@ -52,11 +55,9 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
         LabelCpf = new javax.swing.JLabel();
         labelNome = new javax.swing.JLabel();
         cNome = new javax.swing.JTextField();
-        cEstado = new javax.swing.JComboBox<>();
-        cEstado1 = new javax.swing.JComboBox<>();
         cCidade = new javax.swing.JComboBox<>();
         labelEndereco1 = new javax.swing.JLabel();
-        cEstadoo = new javax.swing.JComboBox<>();
+        cEstado = new javax.swing.JComboBox<>();
         rFeminino = new javax.swing.JRadioButton();
         rMasculino = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
@@ -133,15 +134,11 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
 
         labelNome.setText("Nome:");
 
-        cEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", " " }));
-
-        cEstado1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", " " }));
-
         cCidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tres lagoas", "ilha solteira", "andradina" }));
 
         labelEndereco1.setText("Estado:");
 
-        cEstadoo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "SP", "MS", "MT", " " }));
+        cEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "SP", "MS", "MT", " " }));
 
         buttonGroup1.add(rFeminino);
         rFeminino.setSelected(true);
@@ -213,7 +210,7 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
                                 .addGap(35, 35, 35)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cEstadoo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(labelEndereco)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -232,16 +229,6 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(bSalvar)
                 .addGap(19, 19, 19))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(cEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(cEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,7 +246,7 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
                     .addComponent(labelEndereco)
                     .addComponent(cCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelEndereco1)
-                    .addComponent(cEstadoo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelTelefone)
@@ -275,16 +262,6 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
                     .addComponent(bCancelar)
                     .addComponent(bSalvar))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(cEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(cEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -310,7 +287,7 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
         cadastraAluno();
         
-        this.cdAluno.atualizarTabela();
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
         this.dispose();
     }//GEN-LAST:event_bSalvarActionPerformed
 
@@ -322,6 +299,23 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
                 this.cNome.setText(aluno.getNome());
                 this.cEndereco.setText(aluno.getEndereco());
                 
+                for(int i=0; i<this.cEstado.getItemCount();i++)
+                {
+                       if(this.cEstado.getItemAt(i).toString().equals(aluno.getEstado()))
+                       {
+                           this.cEstado.setSelectedIndex(i);
+                           break;
+                       }
+                }
+                
+                for(int i=0; i<this.cEstado.getItemCount();i++)
+                {
+                       if(this.cCidade.getItemAt(i).toString().equals(aluno.getCidade()))
+                       {
+                           this.cCidade.setSelectedIndex(i);
+                           break;
+                       }
+                }
                 
                 this.cObservacoes.setText(aluno.getObservacoes());
         }
@@ -338,13 +332,26 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
         else 
             sexo = "Masculino";
         
+        if(this.aluno == null)
+        {
+            Aluno aluno = new Aluno(this.cNome.getText(),this.cEndereco.getText(),
+                                    sexo, this.cCidade.getSelectedItem().toString(),
+                                    this.cEstado.getSelectedItem().toString(), null,
+                                    this.cObservacoes.getText());
+            this.listaAlunos.add(aluno);
+        }
+        else
+        {
+               int index = this.listaAlunos.indexOf(this.aluno);
+               Aluno aluno = this.listaAlunos.get(index);
+               aluno.setNome(this.cNome.getText());
+               aluno.setEndereco(this.cEndereco.getText());
+               aluno.setSexo(sexo);
+               aluno.setCidade(this.cCidade.getSelectedItem().toString());
+               aluno.setEstado(this.cEstado.getSelectedItem().toString());
+               aluno.setObservacoes(this.cObservacoes.getText());
+        }
         
-        Aluno aluno = new Aluno(this.cNome.getText(),this.cEndereco.getText(),
-                                sexo, this.cCidade.getSelectedItem().toString(),
-                                this.cEstado.getSelectedItem().toString(), null,
-                                this.cObservacoes.getText());
-        
-        this.listaAlunos.add(aluno);
     
        
     }
@@ -360,8 +367,6 @@ public class CadastroAlunoEditar extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cCidade;
     private javax.swing.JTextField cEndereco;
     private javax.swing.JComboBox<String> cEstado;
-    private javax.swing.JComboBox<String> cEstado1;
-    private javax.swing.JComboBox<String> cEstadoo;
     private javax.swing.JTextField cNome;
     private javax.swing.JTextField cObservacoes;
     private javax.swing.JButton jButton1;

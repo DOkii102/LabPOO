@@ -8,6 +8,7 @@ import classes.Aluno;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.DefaultTableModel;
+import operacoes.OperacoesTabela;
 
 /**
  *
@@ -16,7 +17,8 @@ import javax.swing.table.DefaultTableModel;
 public class CadastroAluno extends javax.swing.JFrame {
 
     private ArrayList<Aluno> listaAlunos = new ArrayList();
-
+    private int indexRow;
+    
     /**
      * Creates new form CadastroAluno
      */
@@ -62,14 +64,14 @@ public class CadastroAluno extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome", "Sexo", "Cidade", "Estado"
+                "Id", "Nome", "Sexo", "Cidade", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -80,10 +82,17 @@ public class CadastroAluno extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaAlunos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabelaAlunos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaAlunosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaAlunos);
 
         bRemover.setFont(new java.awt.Font("Fira Sans", 0, 13)); // NOI18N
         bRemover.setText("Remover");
+        bRemover.setEnabled(false);
         bRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bRemoverActionPerformed(evt);
@@ -259,11 +268,11 @@ public class CadastroAluno extends javax.swing.JFrame {
 
     private void bNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovoActionPerformed
         
-        new CadastroAlunoEditar(this.listaAlunos, null,this);
+        new CadastroNovoAluno(this.listaAlunos, null, this.tabelaAlunos);
 
         
 
-        atualizarTabela();
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
 
 
     }//GEN-LAST:event_bNovoActionPerformed
@@ -273,42 +282,44 @@ public class CadastroAluno extends javax.swing.JFrame {
     }//GEN-LAST:event_bSairActionPerformed
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
-        // TODO add your handling code here:
+        
+        
+        Aluno aluno = OperacoesTabela.getAlunoTabela(this.listaAlunos,this.tabelaAlunos, this.indexRow);
+        new CadastroNovoAluno(this.listaAlunos, aluno, this.tabelaAlunos);
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
+        
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
+        
+        
     }//GEN-LAST:event_bEditarActionPerformed
 
     private void bRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRemoverActionPerformed
-        // TODO add your handling code here:
-        removerAluno();
-        atualizarTabela();
+
+        
+        Aluno aluno = OperacoesTabela.getAlunoTabela(this.listaAlunos,this.tabelaAlunos, this.indexRow);
+        this.listaAlunos.remove(aluno);
+        
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
+        
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
     }//GEN-LAST:event_bRemoverActionPerformed
 
-    public void atualizarTabela() {
-        DefaultTableModel tableModel = (DefaultTableModel) tabelaAlunos.getModel();
-        tableModel.setRowCount(0);
-
-        String nome;
-        String sexo;
-        String cidade;
-        String estado;
-
-        Collections.sort(listaAlunos);
-        for (Aluno aluno : listaAlunos) {
-            nome = aluno.getNome();
-            sexo = aluno.getSexo();
-            cidade = aluno.getCidade();
-            estado = aluno.getEstado();
-
-            Object[] dado = {nome, sexo, cidade, estado};
-            tableModel.addRow(dado);
-        }
-    }
-    
-    public void removerAluno()
-    {
-        tabelaAlunos.remove(tabelaAlunos.getSelectedRow());
+    private void tabelaAlunosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaAlunosMouseClicked
+        this.indexRow = this.tabelaAlunos.getSelectedRow();
+        System.out.println("index: "+this.indexRow);
         
-        
-    }
+        this.bRemover.setEnabled(true);
+        this.bEditar.setEnabled(true);
+    }//GEN-LAST:event_tabelaAlunosMouseClicked
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bEditar;

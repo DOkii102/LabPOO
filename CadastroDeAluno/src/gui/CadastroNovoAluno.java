@@ -5,8 +5,13 @@
 package gui;
 
 import classes.Aluno;
+import classes.Filtro;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JTable;
+import javax.swing.ListModel;
 import operacoes.OperacoesTabela;
 
 /**
@@ -18,14 +23,17 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
     private ArrayList<Aluno> listaAlunos;
     private Aluno aluno;
     private JTable tabelaAlunos;
+    private DefaultListModel dlistaInteresses = new DefaultListModel();
+    private Filtro filtro;
     /**
      * Creates new form CadastroAlunoEditar
      */
-    public CadastroNovoAluno(ArrayList<Aluno> listaAlunos, Aluno aluno, JTable tabelaAlunos) {
+    public CadastroNovoAluno(ArrayList<Aluno> listaAlunos, Aluno aluno, JTable tabelaAlunos, Filtro filtro) {
         initComponents();
         this.listaAlunos = listaAlunos;
         this.aluno = aluno;
         this.tabelaAlunos = tabelaAlunos;
+        this.filtro = filtro;
         
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -47,8 +55,8 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
         listaInteressesCheia = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaInteresses = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        bRemoveInteresse = new javax.swing.JButton();
+        bAdicionaInteresse = new javax.swing.JButton();
         labelTelefone = new javax.swing.JLabel();
         labelEndereco = new javax.swing.JLabel();
         cEndereco = new javax.swing.JTextField();
@@ -78,21 +86,21 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(listaInteresses);
 
-        jButton1.setFont(new java.awt.Font("Fira Sans", 1, 24)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 204));
-        jButton1.setText(">>");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bRemoveInteresse.setFont(new java.awt.Font("Fira Sans", 1, 24)); // NOI18N
+        bRemoveInteresse.setForeground(new java.awt.Color(0, 0, 204));
+        bRemoveInteresse.setText(">>");
+        bRemoveInteresse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bRemoveInteresseActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Fira Sans", 1, 24)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(204, 0, 0));
-        jButton2.setText("<<");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        bAdicionaInteresse.setFont(new java.awt.Font("Fira Sans", 1, 24)); // NOI18N
+        bAdicionaInteresse.setForeground(new java.awt.Color(204, 0, 0));
+        bAdicionaInteresse.setText("<<");
+        bAdicionaInteresse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                bAdicionaInteresseActionPerformed(evt);
             }
         });
 
@@ -105,8 +113,8 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(bRemoveInteresse)
+                    .addComponent(bAdicionaInteresse))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
@@ -115,9 +123,9 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(jButton1)
+                .addComponent(bRemoveInteresse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addComponent(bAdicionaInteresse)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -267,13 +275,39 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void bRemoveInteresseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRemoveInteresseActionPerformed
+        
+        Object lista[] = this.listaInteresses.getSelectedValues(); 
+        
+        int i = 0;
+        while(i < lista.length) {
+            if(this.dlistaInteresses.contains(lista[i]))
+            {
+                this.dlistaInteresses.removeElement(lista[i]);
+                i--;
+            }
+            i++;
+        }
+        
+                
+        this.listaInteresses.setModel(this.dlistaInteresses);
+        
+        
+    }//GEN-LAST:event_bRemoveInteresseActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void bAdicionaInteresseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAdicionaInteresseActionPerformed
+        
+        Object lista[] = this.listaInteressesCheia.getSelectedValues(); 
+        
+        
+        for (int i = 0; i < lista.length; i++) {
+            if(!this.dlistaInteresses.contains(lista[i]))
+                this.dlistaInteresses.addElement(lista[i]);
+        }
+        
+                
+        this.listaInteresses.setModel(this.dlistaInteresses);
+    }//GEN-LAST:event_bAdicionaInteresseActionPerformed
 
     private void rFemininoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rFemininoActionPerformed
         // TODO add your handling code here:
@@ -287,7 +321,7 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
         cadastraAluno();
         
-        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         this.dispose();
     }//GEN-LAST:event_bSalvarActionPerformed
 
@@ -317,6 +351,15 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
                        }
                 }
                 
+                Object lista[] = aluno.getInteresses().toArray();
+                for (int i = 0; i < lista.length; i++) {
+                    if(!this.dlistaInteresses.contains(lista[i]))
+                        this.dlistaInteresses.addElement(lista[i]);
+                }
+
+
+                this.listaInteresses.setModel(this.dlistaInteresses);
+                
                 this.cObservacoes.setText(aluno.getObservacoes());
         }
     
@@ -332,11 +375,18 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
         else 
             sexo = "Masculino";
         
+        ArrayList<String> interesses = new ArrayList<String>();
+        for (int i = 0; i < this.dlistaInteresses.size(); i++) {
+            interesses.add(this.dlistaInteresses.getElementAt(i).toString());
+        }
+        
+        
+        
         if(this.aluno == null)
         {
             Aluno aluno = new Aluno(this.cNome.getText(),this.cEndereco.getText(),
                                     sexo, this.cCidade.getSelectedItem().toString(),
-                                    this.cEstado.getSelectedItem().toString(), null,
+                                    this.cEstado.getSelectedItem().toString(), interesses,
                                     this.cObservacoes.getText());
             this.listaAlunos.add(aluno);
         }
@@ -349,6 +399,7 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
                aluno.setSexo(sexo);
                aluno.setCidade(this.cCidade.getSelectedItem().toString());
                aluno.setEstado(this.cEstado.getSelectedItem().toString());
+               aluno.setInteresses(interesses);
                aluno.setObservacoes(this.cObservacoes.getText());
         }
         
@@ -361,7 +412,9 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelCpf;
+    private javax.swing.JButton bAdicionaInteresse;
     private javax.swing.JButton bCancelar;
+    private javax.swing.JButton bRemoveInteresse;
     private javax.swing.JButton bSalvar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cCidade;
@@ -369,8 +422,6 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cEstado;
     private javax.swing.JTextField cNome;
     private javax.swing.JTextField cObservacoes;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

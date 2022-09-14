@@ -5,6 +5,7 @@
 package gui;
 
 import classes.Aluno;
+import classes.Filtro;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +19,7 @@ public class CadastroAluno extends javax.swing.JFrame {
 
     private ArrayList<Aluno> listaAlunos = new ArrayList();
     private int indexRow;
+    private Filtro filtro = new Filtro();
     
     /**
      * Creates new form CadastroAluno
@@ -25,6 +27,8 @@ public class CadastroAluno extends javax.swing.JFrame {
     public CadastroAluno() {
         initComponents();
 
+        
+        
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -148,11 +152,28 @@ public class CadastroAluno extends javax.swing.JFrame {
 
         jLabel2.setText("Nome:");
 
+        tNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tNomeActionPerformed(evt);
+            }
+        });
+
+        tCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tCidadeActionPerformed(evt);
+            }
+        });
+
         jLabel3.setText("Cidade:");
 
         jLabel4.setText("Sexo:");
 
         rFeminino.setText("Feminino");
+        rFeminino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rFemininoActionPerformed(evt);
+            }
+        });
 
         rMasculino.setText("Masculino");
         rMasculino.addActionListener(new java.awt.event.ActionListener() {
@@ -163,7 +184,12 @@ public class CadastroAluno extends javax.swing.JFrame {
 
         jLabel5.setText("Estado");
 
-        cEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", " " }));
+        cEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "SP", "MS" }));
+        cEstado.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cEstadoItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -263,16 +289,18 @@ public class CadastroAluno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rMasculinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rMasculinoActionPerformed
-        // TODO add your handling code here:
+        this.filtro.setMasculino(true);
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
     }//GEN-LAST:event_rMasculinoActionPerformed
 
     private void bNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovoActionPerformed
         
-        new CadastroNovoAluno(this.listaAlunos, null, this.tabelaAlunos);
+        new CadastroNovoAluno(this.listaAlunos, null, this.tabelaAlunos, this.filtro);
 
         
 
-        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
 
 
     }//GEN-LAST:event_bNovoActionPerformed
@@ -285,9 +313,9 @@ public class CadastroAluno extends javax.swing.JFrame {
         
         
         Aluno aluno = OperacoesTabela.getAlunoTabela(this.listaAlunos,this.tabelaAlunos, this.indexRow);
-        new CadastroNovoAluno(this.listaAlunos, aluno, this.tabelaAlunos);
+        new CadastroNovoAluno(this.listaAlunos, aluno, this.tabelaAlunos, this.filtro);
         
-        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         
         
         this.jPanel2.requestFocus();
@@ -304,7 +332,7 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.listaAlunos.remove(aluno);
         
         
-        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos);
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         
         
         this.jPanel2.requestFocus();
@@ -319,6 +347,32 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.bRemover.setEnabled(true);
         this.bEditar.setEnabled(true);
     }//GEN-LAST:event_tabelaAlunosMouseClicked
+
+    private void rFemininoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rFemininoActionPerformed
+        this.filtro.setFeminino(true);
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+    }//GEN-LAST:event_rFemininoActionPerformed
+
+    private void tNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNomeActionPerformed
+        this.filtro.setNome(this.tNome.getText());
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+    }//GEN-LAST:event_tNomeActionPerformed
+
+    private void tCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCidadeActionPerformed
+        
+        this.filtro.setCidade(this.tCidade.getText());
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+    }//GEN-LAST:event_tCidadeActionPerformed
+
+    private void cEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cEstadoItemStateChanged
+        
+        this.filtro.setEstado(this.cEstado.getSelectedItem().toString());
+        
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+    }//GEN-LAST:event_cEstadoItemStateChanged
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

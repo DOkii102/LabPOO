@@ -292,6 +292,10 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.filtro.setMasculino(true);
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
     }//GEN-LAST:event_rMasculinoActionPerformed
 
     private void bNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovoActionPerformed
@@ -352,12 +356,20 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.filtro.setFeminino(true);
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
     }//GEN-LAST:event_rFemininoActionPerformed
 
     private void tNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNomeActionPerformed
         this.filtro.setNome(this.tNome.getText());
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
     }//GEN-LAST:event_tNomeActionPerformed
 
     private void tCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCidadeActionPerformed
@@ -365,6 +377,10 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.filtro.setCidade(this.tCidade.getText());
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
     }//GEN-LAST:event_tCidadeActionPerformed
 
     private void cEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cEstadoItemStateChanged
@@ -372,6 +388,10 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.filtro.setEstado(this.cEstado.getSelectedItem().toString());
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
+        
+        this.jPanel2.requestFocus();
+        this.bRemover.setEnabled(false);
+        this.bEditar.setEnabled(false);
     }//GEN-LAST:event_cEstadoItemStateChanged
 
     

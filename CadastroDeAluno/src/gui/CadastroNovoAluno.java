@@ -5,10 +5,15 @@
 package gui;
 
 import classes.Aluno;
+import classes.Estados;
 import classes.Filtro;
+import excecoes.EnderecoVazioException;
+import excecoes.NomeVazioException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
@@ -25,18 +30,23 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
     private JTable tabelaAlunos;
     private DefaultListModel dlistaInteresses = new DefaultListModel();
     private Filtro filtro;
+    private Estados estados;
     /**
      * Creates new form CadastroAlunoEditar
      */
-    public CadastroNovoAluno(ArrayList<Aluno> listaAlunos, Aluno aluno, JTable tabelaAlunos, Filtro filtro) {
+    public CadastroNovoAluno(ArrayList<Aluno> listaAlunos, Aluno aluno, JTable tabelaAlunos, Filtro filtro, Estados estados) {
         initComponents();
         this.listaAlunos = listaAlunos;
         this.aluno = aluno;
         this.tabelaAlunos = tabelaAlunos;
         this.filtro = filtro;
+        this.estados = estados;
         
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        
+        carregaEstados();
+        carregaCidades();
         carregaDadaos(aluno);
     }
 
@@ -142,11 +152,13 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
 
         labelNome.setText("Nome:");
 
-        cCidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tres lagoas", "ilha solteira", "andradina" }));
-
         labelEndereco1.setText("Estado:");
 
-        cEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "SP", "MS", "MT", " " }));
+        cEstado.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cEstadoItemStateChanged(evt);
+            }
+        });
 
         buttonGroup1.add(rFeminino);
         rFeminino.setSelected(true);
@@ -319,11 +331,21 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
     }//GEN-LAST:event_bCancelarActionPerformed
 
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
-        cadastraAluno();
+        try {
+            cadastraAluno();
+            this.dispose();
+        } catch (NomeVazioException ex) {
+            new Aviso(ex.getMessage());
+        } catch (EnderecoVazioException ex) {
+            new Aviso(ex.getMessage());
+        }
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
-        this.dispose();
     }//GEN-LAST:event_bSalvarActionPerformed
+
+    private void cEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cEstadoItemStateChanged
+        carregaCidades();
+    }//GEN-LAST:event_cEstadoItemStateChanged
 
     
     public void carregaDadaos(Aluno aluno)
@@ -342,7 +364,7 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
                        }
                 }
                 
-                for(int i=0; i<this.cEstado.getItemCount();i++)
+                for(int i=0; i<this.cCidade.getItemCount();i++)
                 {
                        if(this.cCidade.getItemAt(i).toString().equals(aluno.getCidade()))
                        {
@@ -367,8 +389,14 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
     }
     
     
-    public void cadastraAluno()
+    public void cadastraAluno() throws NomeVazioException, EnderecoVazioException
     {
+        if(this.cNome.getText().equals(""))
+            throw new NomeVazioException();
+        
+        if(this.cEndereco.getText().equals(""))
+            throw new EnderecoVazioException();
+        
         String sexo;
         if(this.rFeminino.isSelected())
                sexo = "Feminino";
@@ -405,6 +433,245 @@ public class CadastroNovoAluno extends javax.swing.JFrame {
         
     
        
+    }
+    
+    
+    public void carregaEstados()
+    {
+        this.cEstado.addItem("AC");
+        this.cEstado.addItem("AL");
+        this.cEstado.addItem("AP");
+        this.cEstado.addItem("AM");
+        this.cEstado.addItem("BA");
+        this.cEstado.addItem("CE");
+        this.cEstado.addItem("DF");
+        this.cEstado.addItem("ES");
+        this.cEstado.addItem("GO");
+        this.cEstado.addItem("MA");
+        this.cEstado.addItem("MT");
+        this.cEstado.addItem("MS");
+        this.cEstado.addItem("MG");
+        this.cEstado.addItem("PA");
+        this.cEstado.addItem("PB");
+        this.cEstado.addItem("PR");
+        this.cEstado.addItem("PE");
+        this.cEstado.addItem("PI");
+        this.cEstado.addItem("RJ");
+        this.cEstado.addItem("RN");
+        this.cEstado.addItem("RS");
+        this.cEstado.addItem("RO");
+        this.cEstado.addItem("RR");
+        this.cEstado.addItem("SC");
+        this.cEstado.addItem("SP");
+        this.cEstado.addItem("SE");
+        this.cEstado.addItem("TO");
+        
+    
+    }
+    
+    public void carregaCidades()
+    {
+        this.cCidade.removeAllItems();
+        
+        
+        
+        if(this.cEstado.getSelectedItem().toString().equals("AC"))
+        {
+            for (int i = 0; i < this.estados.getAc().size() ;i++) {
+                this.cCidade.addItem(this.estados.getAc().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("AL"))
+        {
+            for (int i = 0; i < this.estados.getAl().size() ;i++) {
+                this.cCidade.addItem(this.estados.getAl().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("AP"))
+        {
+            for (int i = 0; i < this.estados.getAp().size() ;i++) {
+                this.cCidade.addItem(this.estados.getAp().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("AM"))
+        {
+            for (int i = 0; i < this.estados.getAm().size() ;i++) {
+                this.cCidade.addItem(this.estados.getAm().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("BA"))
+        {
+            for (int i = 0; i < this.estados.getBa().size() ;i++) {
+                this.cCidade.addItem(this.estados.getBa().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("CE"))
+        {
+            for (int i = 0; i < this.estados.getCe().size() ;i++) {
+                this.cCidade.addItem(this.estados.getCe().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("DF"))
+        {
+            for (int i = 0; i < this.estados.getDf().size() ;i++) {
+                this.cCidade.addItem(this.estados.getDf().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("ES"))
+        {
+            for (int i = 0; i < this.estados.getEs().size() ;i++) {
+                this.cCidade.addItem(this.estados.getEs().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("GO"))
+        {
+            for (int i = 0; i < this.estados.getGo().size() ;i++) {
+                this.cCidade.addItem(this.estados.getGo().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("MA"))
+        {
+            for (int i = 0; i < this.estados.getMa().size() ;i++) {
+                this.cCidade.addItem(this.estados.getMa().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("MT"))
+        {
+            for (int i = 0; i < this.estados.getMt().size() ;i++) {
+                this.cCidade.addItem(this.estados.getMt().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("MS"))
+        {
+            for (int i = 0; i < this.estados.getMs().size() ;i++) {
+                this.cCidade.addItem(this.estados.getMs().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("MG"))
+        {
+            for (int i = 0; i < this.estados.getMg().size() ;i++) {
+                this.cCidade.addItem(this.estados.getMg().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("AC"))
+        {
+            for (int i = 0; i < this.estados.getAc().size() ;i++) {
+                this.cCidade.addItem(this.estados.getAc().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("PA"))
+        {
+            for (int i = 0; i < this.estados.getPa().size() ;i++) {
+                this.cCidade.addItem(this.estados.getPa().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("PB"))
+        {
+            for (int i = 0; i < this.estados.getPb().size() ;i++) {
+                this.cCidade.addItem(this.estados.getPb().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("PR"))
+        {
+            for (int i = 0; i < this.estados.getPr().size() ;i++) {
+                this.cCidade.addItem(this.estados.getPr().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("PE"))
+        {
+            for (int i = 0; i < this.estados.getPe().size() ;i++) {
+                this.cCidade.addItem(this.estados.getPe().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("PI"))
+        {
+            for (int i = 0; i < this.estados.getPi().size() ;i++) {
+                this.cCidade.addItem(this.estados.getPi().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("RJ"))
+        {
+            for (int i = 0; i < this.estados.getRj().size() ;i++) {
+                this.cCidade.addItem(this.estados.getRj().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("RN"))
+        {
+            for (int i = 0; i < this.estados.getRn().size() ;i++) {
+                this.cCidade.addItem(this.estados.getRn().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("RS"))
+        {
+            for (int i = 0; i < this.estados.getRs().size() ;i++) {
+                this.cCidade.addItem(this.estados.getRs().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("RO"))
+        {
+            for (int i = 0; i < this.estados.getRo().size() ;i++) {
+                this.cCidade.addItem(this.estados.getRo().get(i));
+            }
+        }
+        else if(this.cEstado.getSelectedItem().toString().equals("RR"))
+        {
+            for (int i = 0; i < this.estados.getRr().size() ;i++) {
+                this.cCidade.addItem(this.estados.getRr().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("SC"))
+        {
+            for (int i = 0; i < this.estados.getSc().size() ;i++) {
+                this.cCidade.addItem(this.estados.getSc().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("SP"))
+        {
+            for (int i = 0; i < this.estados.getSp().size() ;i++) {
+                this.cCidade.addItem(this.estados.getSp().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("SE"))
+        {
+            for (int i = 0; i < this.estados.getSe().size() ;i++) {
+                this.cCidade.addItem(this.estados.getSe().get(i));
+            }
+        }
+        
+        else if(this.cEstado.getSelectedItem().toString().equals("TO"))
+        {
+            for (int i = 0; i < this.estados.getTo().size() ;i++) {
+                this.cCidade.addItem(this.estados.getTo().get(i));
+            }
+        }
+        
+        
+    
     }
     /**
      * @param args the command line arguments

@@ -4,14 +4,16 @@
  */
 package classes;
 
+import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 
 /**
  *
  * @author joovitor
  */
-public class Aluno implements Comparable<Aluno>{
-    private static int contador=0;
+public class Aluno implements Comparable<Aluno>, Serializable{
+    private static int contador;
     private int id;
     private String nome;
     private String endereco;
@@ -91,6 +93,14 @@ public class Aluno implements Comparable<Aluno>{
 
     public int getId() {
         return id;
+    }
+
+    public static int getContador() {
+        return contador;
+    }
+
+    public static void setContador(int contador) {
+        Aluno.contador = contador;
     }
 
     

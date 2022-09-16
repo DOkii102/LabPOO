@@ -37,9 +37,9 @@ public class OperacoesTabela {
             
             if(filtro.isFeminino() ^ filtro.isMasculino())
             {
-                if(filtro.isFeminino() && !aluno.getSexo().contains("Feminino"))
+                if(filtro.isFeminino() && !aluno.getSexo().equals("Feminino"))
                     imprime++;
-                else if(!aluno.getSexo().contains("Masculino"))
+                else if(filtro.isMasculino() && !aluno.getSexo().equals("Masculino"))
                     imprime++;
             }
             

@@ -5,10 +5,12 @@
 package gui;
 
 import classes.Aluno;
+import classes.Estados;
 import classes.Filtro;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.DefaultTableModel;
+import operacoes.IO;
 import operacoes.OperacoesTabela;
 
 /**
@@ -17,18 +19,23 @@ import operacoes.OperacoesTabela;
  */
 public class CadastroAluno extends javax.swing.JFrame {
 
-    private ArrayList<Aluno> listaAlunos = new ArrayList();
+    private ArrayList<Aluno> listaAlunos;
     private int indexRow;
     private Filtro filtro = new Filtro();
+    private Estados estados = new Estados();
     
     /**
      * Creates new form CadastroAluno
      */
-    public CadastroAluno() {
+    public CadastroAluno(ArrayList<Aluno> listaAlunos) {
         initComponents();
-
+        IO.carregarEstados(this.estados);
+        this.listaAlunos = listaAlunos;
+        Aluno.setContador(IO.leituraContadorAlunos());
         
         
+        carregaEstados();
+        OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -184,7 +191,6 @@ public class CadastroAluno extends javax.swing.JFrame {
 
         jLabel5.setText("Estado");
 
-        cEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "SP", "MS" }));
         cEstado.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cEstadoItemStateChanged(evt);
@@ -289,7 +295,10 @@ public class CadastroAluno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rMasculinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rMasculinoActionPerformed
-        this.filtro.setMasculino(true);
+        if(this.rMasculino.isSelected())
+            this.filtro.setMasculino(true);
+        else
+            this.filtro.setMasculino(false);
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         
@@ -300,7 +309,7 @@ public class CadastroAluno extends javax.swing.JFrame {
 
     private void bNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovoActionPerformed
         
-        new CadastroNovoAluno(this.listaAlunos, null, this.tabelaAlunos, this.filtro);
+        new CadastroNovoAluno(this.listaAlunos, null, this.tabelaAlunos, this.filtro, this.estados);
 
         
 
@@ -311,13 +320,15 @@ public class CadastroAluno extends javax.swing.JFrame {
 
     private void bSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSairActionPerformed
         this.dispose();
+        IO.salvarAlunos(this.listaAlunos);
+        IO.salvarCountAlunos(Aluno.getContador());
     }//GEN-LAST:event_bSairActionPerformed
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         
         
         Aluno aluno = OperacoesTabela.getAlunoTabela(this.listaAlunos,this.tabelaAlunos, this.indexRow);
-        new CadastroNovoAluno(this.listaAlunos, aluno, this.tabelaAlunos, this.filtro);
+        new CadastroNovoAluno(this.listaAlunos, aluno, this.tabelaAlunos, this.filtro, this.estados);
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         
@@ -346,14 +357,17 @@ public class CadastroAluno extends javax.swing.JFrame {
 
     private void tabelaAlunosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaAlunosMouseClicked
         this.indexRow = this.tabelaAlunos.getSelectedRow();
-        System.out.println("index: "+this.indexRow);
         
         this.bRemover.setEnabled(true);
         this.bEditar.setEnabled(true);
     }//GEN-LAST:event_tabelaAlunosMouseClicked
 
     private void rFemininoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rFemininoActionPerformed
-        this.filtro.setFeminino(true);
+        if(this.rFeminino.isSelected())
+            this.filtro.setFeminino(true);
+        else
+            this.filtro.setFeminino(false);
+        
         
         OperacoesTabela.atualizarTabela(this.listaAlunos, this.tabelaAlunos, this.filtro);
         
@@ -394,6 +408,40 @@ public class CadastroAluno extends javax.swing.JFrame {
         this.bEditar.setEnabled(false);
     }//GEN-LAST:event_cEstadoItemStateChanged
 
+    
+    public void carregaEstados()
+    {
+        this.cEstado.addItem("Todos");
+        this.cEstado.addItem("AC");
+        this.cEstado.addItem("AL");
+        this.cEstado.addItem("AP");
+        this.cEstado.addItem("AM");
+        this.cEstado.addItem("BA");
+        this.cEstado.addItem("CE");
+        this.cEstado.addItem("DF");
+        this.cEstado.addItem("ES");
+        this.cEstado.addItem("GO");
+        this.cEstado.addItem("MA");
+        this.cEstado.addItem("MT");
+        this.cEstado.addItem("MS");
+        this.cEstado.addItem("MG");
+        this.cEstado.addItem("PA");
+        this.cEstado.addItem("PB");
+        this.cEstado.addItem("PR");
+        this.cEstado.addItem("PE");
+        this.cEstado.addItem("PI");
+        this.cEstado.addItem("RJ");
+        this.cEstado.addItem("RN");
+        this.cEstado.addItem("RS");
+        this.cEstado.addItem("RO");
+        this.cEstado.addItem("RR");
+        this.cEstado.addItem("SC");
+        this.cEstado.addItem("SP");
+        this.cEstado.addItem("SE");
+        this.cEstado.addItem("TO");
+        
+    
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bEditar;

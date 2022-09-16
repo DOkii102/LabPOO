@@ -276,11 +276,7 @@
     <Component class="javax.swing.JComboBox" name="cCidade">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
-            <StringItem index="0" value="Tres lagoas"/>
-            <StringItem index="1" value="ilha solteira"/>
-            <StringItem index="2" value="andradina"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -295,15 +291,12 @@
     <Component class="javax.swing.JComboBox" name="cEstado">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
-            <StringItem index="0" value="AC"/>
-            <StringItem index="1" value="SP"/>
-            <StringItem index="2" value="MS"/>
-            <StringItem index="3" value="MT"/>
-            <StringItem index="4" value=" "/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cEstadoItemStateChanged"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

@@ -1,5 +1,10 @@
 
+import classes.Aluno;
+import classes.Estados;
 import gui.CadastroAluno;
+import java.io.File;
+import java.util.ArrayList;
+import operacoes.IO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,9 +17,9 @@ import gui.CadastroAluno;
  */
 public class Principal {
 
-    /**
-     * @param args the command line arguments
-     */
+    public static ArrayList<Aluno> alunos = IO.lerAlunos();
+    
+    
     public static void main(String[] args) {
         criarGUI();
     }
@@ -23,7 +28,7 @@ public class Principal {
     {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastroAluno().setVisible(true);
+                new CadastroAluno(alunos).setVisible(true);
             }
         });
     }
